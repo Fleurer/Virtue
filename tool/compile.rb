@@ -2,11 +2,11 @@ def omap(path)
   "bin/#{File.basename(path).ext('o')}"
 end
 
-CC = 'g++'
+CC = 'gcc'
 CFLAG = '-Wall'
 CINC = ''
 
-cfiles = FileList['src/*.cpp']
+cfiles = FileList['src/*.c']
 hfiles = FileList['src/vt/*.h']
 ofiles = cfiles.map{|path| omap(path) }
 
