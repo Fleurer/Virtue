@@ -1,6 +1,6 @@
 #ifndef EVENT_H
 #define EVENT_H
-
+#include <stddef>
 #include <sys/select.h>
 #include "queue.h"
 
@@ -15,6 +15,7 @@ typedef struct vt_event_loop {
     fd_set read_fds;
     fd_set write_fds;
     fd_set except_fds;
+    size_t maxfd;
 } vt_event_loop_t;
 
 typedef struct vt_io_event {
@@ -28,6 +29,11 @@ typedef struct vt_io_event {
     TAILQ_ENTRY(vt_event) entry;
     struct vt_buf *buf;
 } vt_io_event_t;
+
+enum {
+    EV_IO_READ = 1,
+    EV_IO_WRITE,
+};
 
 int vt_event_process(vt_event_loop_t *elp);
 int vt_io_event_init(vt_io_event_t *ev, int flag, int fd);
