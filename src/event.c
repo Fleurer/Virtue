@@ -12,6 +12,8 @@ int vt_cycle_init(vt_cycle_t *cl) {
     return 0;
 }
 
+/* TODO: take a rb-tree to replace the brute-force tranverse later.
+ * */
 int vt_event_process(vt_cycle_t *cl) {
     int r; 
     vt_event_t *ev;
