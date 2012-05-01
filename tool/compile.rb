@@ -3,7 +3,7 @@ def omap(path)
 end
 
 CC = 'gcc'
-CFLAG = '-Wall'
+CFLAG = '-Wall -Werror'
 CINC = ''
 
 cfiles = FileList['src/*.c']
