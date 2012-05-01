@@ -33,6 +33,7 @@ typedef struct vt_event {
     TAILQ_ENTRY(vt_event) entry;
     struct vt_buf *buf;
     struct vt_conn *conn;
+    struct vt_cycle *cycle;
 } vt_event_t;
 
 typedef struct vt_timer {

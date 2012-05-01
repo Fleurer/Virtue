@@ -13,6 +13,7 @@ int vt_sockfd_on_readable(vt_event_t *ev) {
     if (conn == NULL) {
         vt_log("new connection failed\n");
     }
+    vt_event_add(ev->cycle, &conn->event);
     vt_log("new connection established, fd: %d\n", conn->fd);
     return 0;
 }

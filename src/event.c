@@ -1,6 +1,3 @@
-#include <sys/select.h>
-#include <errno.h>
-#include <string.h>
 #include "vt.h"
 #include "event.h"
 #include "buf.h"
@@ -52,6 +49,7 @@ int vt_event_init(vt_event_t *ev, int fd, int flag, vt_conn_t *conn) {
     ev->on_readable = NULL;
     ev->on_writeable = NULL;
     ev->on_error = NULL;
+    ev->cycle = NULL;
     ev->conn = conn;
     return 0;
 }
@@ -67,6 +65,7 @@ int vt_event_bind(vt_event_t *ev, int flag, vt_event_cb_t cb) {
 }
 
 int vt_event_add(vt_cycle_t *cl, vt_event_t *ev) {
+    assert(cl != NULL);
     if (ev->flag & EV_READ) {
         FD_SET(ev->fd, &cl->read_fds);
     }
@@ -76,6 +75,7 @@ int vt_event_add(vt_cycle_t *cl, vt_event_t *ev) {
     if (ev->fd > cl->max_fd) {
         cl->max_fd = ev->fd;
     }
+    ev->cycle = cl;
     TAILQ_INSERT_TAIL(&cl->io_event_entries, ev, entry);
     vt_log("added event, fd: %d, max_fd: %d\n", ev->fd, cl->max_fd);
     return 0;
