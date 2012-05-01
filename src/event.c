@@ -45,12 +45,13 @@ int vt_event_process(vt_cycle_t *cl) {
 
 /* ------------------ */
 
-int vt_event_init(vt_event_t *ev, int fd, int flag) {
+int vt_event_init(vt_event_t *ev, int fd, int flag, vt_conn_t *conn) {
     ev->flag = flag;
     ev->fd = fd;
     ev->on_readable = NULL;
     ev->on_writeable = NULL;
     ev->on_error = NULL;
+    ev->conn = conn;
     return 0;
 }
 

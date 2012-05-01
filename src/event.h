@@ -4,6 +4,7 @@
 #include <stddef.h>
 #include <sys/select.h>
 #include "queue.h"
+#include "conn.h"
 
 struct vt_cycle;
 struct vt_event;
@@ -29,6 +30,7 @@ typedef struct vt_event {
     /* private */
     TAILQ_ENTRY(vt_event) entry;
     struct vt_buf *buf;
+    struct vt_conn *conn;
 } vt_event_t;
 
 typedef struct vt_timer {
@@ -42,7 +44,7 @@ enum {
 
 int vt_cycle_init(vt_cycle_t *cl);
 int vt_event_process(vt_cycle_t *cl);
-int vt_event_init(vt_event_t *ev, int fd, int flag);
+int vt_event_init(vt_event_t *ev, int fd, int flag, vt_conn_t *conn);
 int vt_event_bind(vt_event_t *ev, int flag, vt_event_cb_t cb);
 int vt_event_add(vt_cycle_t *elp, vt_event_t *ep);
 int vt_event_remove(vt_cycle_t *elp, vt_event_t *ep);
