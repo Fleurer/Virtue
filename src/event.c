@@ -1,9 +1,10 @@
 #include <sys/select.h>
 #include <errno.h>
 #include <string.h>
+#include "vt.h"
 #include "event.h"
 #include "buf.h"
-#include "vt.h"
+#include "conn.h"
 
 int vt_cycle_init(vt_cycle_t *cl) {
     TAILQ_INIT(&cl->io_event_entries);

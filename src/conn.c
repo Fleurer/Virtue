@@ -1,4 +1,5 @@
 #include "vt.h"
+#include "event.h"
 #include "pool.h"
 #include "conn.h"
 
@@ -17,6 +18,7 @@ vt_conn_t* vt_accept(int sockfd) {
     //
     conn->fd = fd;
     conn->pool = vt_pool_create();
+    vt_event_init(&conn->event, conn->fd, EV_READ | EV_WRITE, conn);
     return conn;
 }
 

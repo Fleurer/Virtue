@@ -5,6 +5,7 @@ struct vt_pool;
 
 typedef struct vt_conn {
     int fd;
+    struct vt_event event;
     struct sockaddr_in sockaddr;
     struct vt_pool *pool;
 } vt_conn_t;
