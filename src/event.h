@@ -1,6 +1,7 @@
 #ifndef EVENT_H
 #define EVENT_H
-#include <stddef>
+
+#include <stddef.h>
 #include <sys/select.h>
 #include "queue.h"
 
@@ -39,7 +40,8 @@ enum {
     EV_WRITE = 0x10,
 };
 
-int vt_event_process(vt_cycle_t *elp);
+int vt_cycle_init(vt_cycle_t *cl);
+int vt_event_process(vt_cycle_t *cl);
 int vt_event_init(vt_event_t *ev, int fd, int flag);
 int vt_event_bind(vt_event_t *ev, int flag, vt_event_cb_t cb);
 int vt_event_add(vt_cycle_t *elp, vt_event_t *ep);

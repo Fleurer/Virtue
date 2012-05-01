@@ -5,9 +5,15 @@
 #include <netinet/in.h>
 #include "vt.h"
 #include "event.h"
+#include "sock.h"
 
 #define PORT 4000
 #define LISTEN_SIZ 10
+
+int vt_sockfd_on_readable(vt_event_t *ev) {
+    vt_log("new sockfd readable\n");
+    return 0;
+}
 
 int vt_main() {
     vt_cycle_t cl;
@@ -20,16 +26,10 @@ int vt_main() {
         return -1;
     }
     vt_event_init(&ev, sockfd, EV_READ);
-    vt_event_bind(&ev, EV_READ, vt_sockfd_on_readable);
+    vt_event_bind(&ev, EV_READ, (vt_event_cb_t)&vt_sockfd_on_readable);
     vt_event_process(&cl);
     return 0;
 }
-
-int vt_sockfd_on_readable(vt_event_t *ev) {
-    vt_log("new sockfd readable\n");
-    return 0;
-}
-
 
 int main(int argc, char *argv[]) {
     vt_main();

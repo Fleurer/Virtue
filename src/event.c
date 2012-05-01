@@ -1,6 +1,9 @@
 #include <sys/select.h>
+#include <errno.h>
+#include <string.h>
 #include "event.h"
 #include "buf.h"
+#include "vt.h"
 
 int vt_cycle_init(vt_cycle_t *cl) {
     TAILQ_INIT(&cl->io_event_entries);
@@ -16,7 +19,7 @@ int vt_event_process(vt_cycle_t *cl) {
     vt_event_t *ev;
     vt_event_cb_t cb;
 
-    while (r = select(cl->max_fd + 1, &cl->read_fds, &cl->write_fds, NULL, NULL)) {
+    while ((r = select(cl->max_fd + 1, &cl->read_fds, &cl->write_fds, NULL, NULL))) {
         if (r < 0) {
             vt_log("select() failed: %d, %s", errno, strerror(errno));
             continue;
@@ -26,13 +29,13 @@ int vt_event_process(vt_cycle_t *cl) {
             if (FD_ISSET(ev->fd, &cl->read_fds)) {
                 cb = ev->on_readable;
                 if (cb)
-                    cb();
+                    cb(ev);
             }
             // in write
             if (FD_ISSET(ev->fd, &cl->write_fds)) {
                 cb = ev->on_readable;
                 if (cb)
-                    cb();
+                    cb(ev);
             }
         }
     }
@@ -61,10 +64,10 @@ int vt_event_bind(vt_event_t *ev, int flag, vt_event_cb_t cb) {
 }
 
 int vt_event_add(vt_cycle_t *cl, vt_event_t *ev) {
-    if (cl->flag & EV_READ) {
+    if (ev->flag & EV_READ) {
         FD_SET(ev->fd, &cl->read_fds);
     }
-    if (cl->flag & EV_WRITE) {
+    if (ev->flag & EV_WRITE) {
         FD_SET(ev->fd, &cl->write_fds);
     }
     if (ev->fd > cl->max_fd) {
@@ -75,10 +78,10 @@ int vt_event_add(vt_cycle_t *cl, vt_event_t *ev) {
 }
 
 int vt_event_remove(vt_cycle_t *cl, vt_event_t *ev) {
-    if (cl->flag & EV_READ) {
+    if (ev->flag & EV_READ) {
         FD_CLR(ev->fd, &cl->read_fds);
     }
-    if (cl->flag & EV_WRITE) {
+    if (ev->flag & EV_WRITE) {
         FD_CLR(ev->fd, &cl->write_fds);
     }
     TAILQ_REMOVE(&cl->io_event_entries, ev, entry);

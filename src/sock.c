@@ -2,9 +2,11 @@
 #include <sys/socket.h>
 #include <sys/types.h>
 #include <sys/select.h>
+#include <sys/fcntl.h>
 #include <netinet/in.h>
 #include "vt.h"
 #include "event.h"
+#include "sock.h"
 
 #define PORT 4000
 #define LISTEN_SIZ 10
@@ -21,7 +23,7 @@ int vt_sockfd_new(){
         return -1;
     }
     opt = 1;
-    setsockopt(sockfd, SOL_SOCKET, SO_REUSEADDR, &opt, sizeof(tmp));
+    setsockopt(sockfd, SOL_SOCKET, SO_REUSEADDR, &opt, sizeof(opt));
     // set up non-blocking
     oflag = fcntl(sockfd, F_GETFL, 0);
     fcntl(sockfd, F_SETFL, oflag | O_NONBLOCK);
