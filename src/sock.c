@@ -43,6 +43,7 @@ int vt_sockfd_new(){
         vt_log("bad listen.");
         return -1;
     }
+    vt_log("listening on port: %d\n", PORT);
     return sockfd;
 }
 

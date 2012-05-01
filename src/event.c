@@ -20,8 +20,9 @@ int vt_event_process(vt_cycle_t *cl) {
     vt_event_cb_t cb;
 
     while ((r = select(cl->max_fd + 1, &cl->read_fds, &cl->write_fds, NULL, NULL))) {
+        vt_log("new cycle\n");
         if (r < 0) {
-            vt_log("select() failed: %d, %s", errno, strerror(errno));
+            vt_log("select() failed: %d, %s\n", errno, strerror(errno));
             continue;
         }
         TAILQ_FOREACH(ev, &cl->io_event_entries, entry) {
