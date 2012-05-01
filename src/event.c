@@ -75,6 +75,7 @@ int vt_event_add(vt_cycle_t *cl, vt_event_t *ev) {
         cl->max_fd = ev->fd;
     }
     TAILQ_INSERT_TAIL(&cl->io_event_entries, ev, entry);
+    vt_log("added event, fd: %d, max_fd: %d\n", ev->fd, cl->max_fd);
     return 0;
 }
 

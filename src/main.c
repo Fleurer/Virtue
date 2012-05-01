@@ -11,6 +11,9 @@
 #define LISTEN_SIZ 10
 
 int vt_sockfd_on_readable(vt_event_t *ev) {
+    int fd;
+
+    fd = accept(ev->fd, NULL, NULL);
     vt_log("new sockfd readable\n");
     return 0;
 }
@@ -27,6 +30,7 @@ int vt_main() {
     }
     vt_event_init(&ev, sockfd, EV_READ);
     vt_event_bind(&ev, EV_READ, (vt_event_cb_t)&vt_sockfd_on_readable);
+    vt_event_add(&cl, &ev);
     vt_event_process(&cl);
     return 0;
 }
