@@ -1,3 +1,5 @@
+$: << File.dirname(__FILE__)
+
 require "tool/compile.rb"
 require "tool/test.rb"
 
