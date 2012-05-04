@@ -12,7 +12,7 @@ struct vt_buf;
 typedef void (*vt_event_cb_t)(struct vt_event *);
 
 typedef struct vt_cycle {
-    TAILQ_HEAD(, vt_event) io_event_entries;
+    TAILQ_HEAD(, vt_event) events;
     fd_set read_fds;
     fd_set write_fds;
     fd_set except_fds;
