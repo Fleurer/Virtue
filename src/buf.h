@@ -3,7 +3,7 @@
 
 #include <stddef.h>
 
-#define VT_BUFSIZ 4096
+#define VT_BUFSIZ (4096*2)
 
 typedef struct vt_buf_entry {
     char buf[VT_BUFSIZ];
@@ -14,5 +14,7 @@ typedef struct vt_buf_entry {
 typedef struct vt_buf {
     struct vt_buf_entry entry;
 } vt_buf_t;
+
+int vt_buf_write(vt_buf_t *bp, char *buff, int size);
 
 #endif
