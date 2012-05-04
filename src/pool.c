@@ -2,7 +2,7 @@
 #include "pool.h"
 #include "vt.h"
 
-vt_pool_t* vt_pool_create() {
+vt_pool_t* vt_pool_new() {
     vt_pool_t *pl; 
 
     pl = (vt_pool_t*)vt_malloc(sizeof(vt_pool_t));

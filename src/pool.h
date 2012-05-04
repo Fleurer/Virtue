@@ -21,7 +21,7 @@ typedef struct vt_pool_entry {
     STAILQ_ENTRY(vt_pool_entry) entry;
 } vt_pool_entry_t;
 
-vt_pool_t* vt_pool_create();
+vt_pool_t* vt_pool_new();
 void vt_pool_destroy(vt_pool_t *pl);
 void* vt_palloc(vt_pool_t *pl, size_t size);
 

@@ -21,7 +21,7 @@ vt_conn_t* vt_accept(int sockfd) {
     }
     //
     conn->fd = fd;
-    conn->pool = vt_pool_create();
+    conn->pool = vt_pool_new();
     vt_event_init(&conn->event, conn->fd, EV_READ | EV_WRITE, conn);
     vt_event_bind(&conn->event, EV_READ, (vt_event_cb_t)&vt_conn_on_readable);
     return conn;
