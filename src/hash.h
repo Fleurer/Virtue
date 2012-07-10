@@ -2,11 +2,13 @@
 #define HASH_H
 
 #include <stdlib.h>
+#include "queue.h"
 
 struct vt_str;
 struct vt_pool;
 
 typedef int (*vt_keyval_cb_t)(struct vt_str *key, struct vt_str *val);
+typedef LIST_HEAD(, vt_hash_elm) vt_hash_bucket_t;
 
 #define VT_HASH_NBUCKETS_DEFAULT 83
 
@@ -19,13 +21,13 @@ typedef struct vt_hash_elm {
     unsigned int        hash;
     struct vt_str       *key;
     struct vt_str       *val;
-    struct vt_hash_elm  *next;
+    LIST_ENTRY(vt_hash_elm) entry;
 } vt_hash_elm_t;
 
 typedef struct vt_hash {
-    struct vt_hash_elm     *buckets;
-    size_t                  nbuckets;
-    size_t                  nelms;
+    vt_hash_bucket_t   *buckets;
+    size_t              nbuckets;
+    size_t              nelms;
 } vt_hash_t;
 
 int  vt_hash_init(vt_hash_t *hash);
