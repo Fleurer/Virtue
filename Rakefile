@@ -16,19 +16,19 @@ test_exefiles = test_cfiles.map{|path| omap(path).ext('') }
 (src_cfiles + test_cfiles).each do |cfile|
   ofile = omap(cfile)
   file ofile => [cfile, *src_hfiles] do 
-    sh "#{CC} #{CFLAG} #{CINC} -c #{cfile} -o #{ofile} 2>&1"
+    sh "#{CC} #{CFLAG} #{CINC} -g -c #{cfile} -o #{ofile} 2>&1"
   end
 end
 
 file 'bin/vt' => src_ofiles do 
-  sh "#{CC} -o bin/vt #{src_ofiles}"
+  sh "#{CC} -g -o bin/vt #{src_ofiles}"
 end
 
 test_ofiles.each do |ofile|
   exe_file = ofile.ext('')
   ofiles = [ofile] + src_ofiles - ['bin/main.o']
   file exe_file => ofiles do 
-    sh "#{CC} -o #{exe_file} #{ofiles*' '}"
+    sh "#{CC} -g -o #{exe_file} #{ofiles*' '}"
   end
 end
 
@@ -52,5 +52,5 @@ task :ctags do
   sh "ctags -R ./src"
 end
 
-task :default => [:ctags, :run]
+task :default => [:ctags, :test]
 
