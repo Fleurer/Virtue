@@ -16,6 +16,7 @@ typedef int (*vt_keyval_cb_t)(struct vt_str *key, struct vt_str *val);
 #define VT_HASH_SEED 0x9221
 
 typedef struct vt_hash_elm {
+    unsigned int        hash;
     struct vt_str       *key;
     struct vt_str       *val;
     struct vt_hash_elm  *next;
@@ -30,7 +31,7 @@ typedef struct vt_hash {
 int  vt_hash_init(vt_hash_t *hash);
 int  vt_hash_init2(vt_hash_t *hash, size_t nbuckets);
 void vt_hash_destroy(vt_hash_t *hash);
-void vt_hash_foreach(vt_hash_t *hash, vt_keyval_cb_t cb);
+size_t vt_hash_foreach(vt_hash_t *hash, vt_keyval_cb_t cb);
 
 struct vt_hash_elm* vt_hash_find_elm(struct vt_hash *hash, struct vt_str *key);
 struct vt_hash_elm* vt_hash_insert(struct vt_hash *hash, struct vt_str *key, struct vt_str *val);

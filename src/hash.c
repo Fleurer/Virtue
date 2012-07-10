@@ -48,7 +48,7 @@ vt_hash_elm_t* vt_hash_find_elm(vt_hash_t *hash, vt_str_t *key){
     elm = hash->buckets[ hval % hash->nbuckets ].next;
     while (elm != NULL) {
         assert(elm->key != NULL);
-        if (elm->key && (0==strcmp(key->str, elm->key->str))) {
+        if ((hval == elm->hash) && elm->key && (0==strcmp(key->str, elm->key->str))) {
             return elm;
         }
         elm = elm->next;
@@ -66,11 +66,12 @@ vt_hash_elm_t* vt_hash_insert(vt_hash_t *hash, vt_str_t *key, vt_str_t *val) {
         return elm;
     }
     // 
+    hval = murmur_hash2(key->str, key->size, VT_HASH_SEED);
     elm = (vt_hash_elm_t*)vt_malloc(sizeof(vt_hash_elm_t));
     elm->key = key;
     elm->val = val;
+    elm->hash = hval;
     // prepend elm into the bucket's list
-    hval = murmur_hash2(key->str, key->size, VT_HASH_SEED);
     bkt = &hash->buckets[ hval % hash->nbuckets ];
     elm->next = bkt->next;
     bkt->next = elm;
@@ -96,8 +97,9 @@ int vt_hash_remove(vt_hash_t *hash, vt_str_t *key) {
 }
 
 // tranverse each key value in the hash table
-void vt_hash_foreach(vt_hash_t *hash, vt_keyval_cb_t cb) {
-    int i, r;
+// returns the number of iterations.
+size_t vt_hash_foreach(vt_hash_t *hash, vt_keyval_cb_t cb) {
+    int i, r, cnt = 0;
     vt_hash_elm_t *bkt, *nelm, *elm;
 
     for (i=0; i<hash->nbuckets; i++) {
@@ -106,11 +108,13 @@ void vt_hash_foreach(vt_hash_t *hash, vt_keyval_cb_t cb) {
         while (elm) {
             nelm = elm->next;
             if (cb) {
+                cnt++;
                 r = cb(elm->key, elm->val);
                 if (r < 0)
-                    return;
+                    return cnt;
             }
             elm = nelm;
         }
     }
+    return cnt;
 }
