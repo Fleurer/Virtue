@@ -3,7 +3,7 @@
 
 #include <string.h>
 
-typedef vt_str {
+typedef struct vt_str {
     char *str;
     unsigned long size;
 } vt_str_t;

@@ -17,8 +17,11 @@ void vt_pool_destroy(vt_pool_t *pl) {
 
     for (pe = STAILQ_FIRST(&pl->entries); pe; pe = npe, nobj++) {
         npe = STAILQ_NEXT(pe, entry);
-        free(pe->mem);
-        free(pe);
+        if (pe->dtor) {
+            pe->dtor(pe->mem);
+        }
+        vt_free(pe->mem);
+        vt_free(pe);
     }
     vt_log("free pool: %p, %d objects freed.\n", pl, nobj);
 }

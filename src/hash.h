@@ -4,6 +4,7 @@
 #include <stdlib.h>
 
 struct vt_str;
+struct vt_pool;
 
 #define VT_HASH_NBUCKETS_DEFAULT 83
 
@@ -25,6 +26,7 @@ typedef struct vt_hash {
 } vt_hash_t;
 
 struct vt_hash* vt_hash_new(struct vt_pool *pl, size_t nbuckets);
+void vt_hash_destroy(vt_hash_t *hash);
 
 struct vt_hash_elm* vt_hash_find_elm(struct vt_hash *hash, struct vt_str *key);
 int vt_hash_remove(struct vt_hash *hash, struct vt_str *key);

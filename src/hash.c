@@ -1,5 +1,7 @@
 #include <assert.h>
 #include <string.h>
+#include "str.h"
+#include "pool.h"
 #include "hash.h"
 
 vt_hash_t* vt_hash_new(struct vt_pool *pl, size_t nbuckets) {
@@ -33,19 +35,19 @@ void vt_hash_destroy(vt_hash_t *hash) {
 
 struct vt_hash_elm* vt_hash_find_elm(struct vt_hash *hash, struct vt_str *key){
     unsigned int hval;
-    vt_hash_elm_t *helm;
+    vt_hash_elm_t *elm;
 
     assert(key != NULL);
     assert(key->str != NULL);
     //
     hval = murmur_hash2(key->str, key->size, VT_HASH_SEED);
-    helm = &hash->buckets[ hval % hash->nbuckets ];
-    while (helm->next != NULL) {
-        if (strcmp(key->str, helm->str)) {
-            return helm;
+    elm = &hash->buckets[ hval % hash->nbuckets ];
+    while (elm->next != NULL) {
+        if (strcmp(key->str, elm->key->str)) {
+            return elm;
         }
         //
-        helm = helm->next;
+        elm = elm->next;
     }
     return NULL;
 }
