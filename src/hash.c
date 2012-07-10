@@ -33,6 +33,8 @@ void vt_hash_destroy(vt_hash_t *hash) {
     vt_free(hash->buckets);
 }
 
+/* -------------------------------------------------------------- */
+
 struct vt_hash_elm* vt_hash_find_elm(struct vt_hash *hash, struct vt_str *key){
     unsigned int hval;
     vt_hash_elm_t *elm;
