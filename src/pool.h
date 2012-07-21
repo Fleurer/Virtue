@@ -11,19 +11,22 @@
 
 struct vt_pool_entry;
 
+typedef void (*vt_dtor_cb_t)(void *mem);
+
 typedef struct vt_pool {
     STAILQ_HEAD(, vt_pool_entry) entries;
 } vt_pool_t;
 
 typedef struct vt_pool_entry {
-    size_t size;
-    void *mem;
+    void            *mem;
+    size_t          size;
+    vt_dtor_cb_t    dtor;
     STAILQ_ENTRY(vt_pool_entry) entry;
 } vt_pool_entry_t;
 
 vt_pool_t* vt_pool_new();
 void vt_pool_destroy(vt_pool_t *pl);
-void* vt_palloc(vt_pool_t *pl, size_t size);
+void* vt_palloc(vt_pool_t *pl, size_t size, vt_dtor_cb_t dtor);
 
 void *vt_malloc(size_t size);
 void vt_free(void *mem);

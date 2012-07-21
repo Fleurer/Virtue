@@ -5,8 +5,8 @@
 vt_buf_entry_t* vt_buf_grow(vt_buf_t *bp) {
     vt_buf_entry_t *be;
     
-    be = (vt_buf_entry_t*)vt_palloc(bp->pool, sizeof(vt_buf_entry_t));
-    be->buf = vt_palloc(bp->pool, VT_BUF_MAXSIZ);
+    be = (vt_buf_entry_t*)vt_palloc(bp->pool, sizeof(vt_buf_entry_t), NULL);
+    be->buf = vt_palloc(bp->pool, VT_BUF_MAXSIZ, NULL);
     be->size = 0;
     STAILQ_INSERT_TAIL(&bp->entries, be, entry);
     return be;
@@ -15,7 +15,7 @@ vt_buf_entry_t* vt_buf_grow(vt_buf_t *bp) {
 vt_buf_t* vt_buf_new(vt_pool_t *pool) {
     vt_buf_t *bp;
 
-    bp = (vt_buf_t*)vt_palloc(pool, sizeof(vt_buf_t));
+    bp = (vt_buf_t*)vt_palloc(pool, sizeof(vt_buf_t), NULL);
     bp->pool = pool;
     STAILQ_INIT(&bp->entries);
     vt_buf_grow(bp);
